@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Text;
 using System.Xml;
 
@@ -13,6 +15,9 @@ namespace MODUL6_103022400008
 
         public SayaMusicUser(string username)
         {
+            Debug.Assert(username.Length <= 100, "Karakter username tidak boleh melebihi 100");
+            Debug.Assert(username != null, "Username tidak boleh kosong");
+
             Random rand = new Random();
             int rand_num = rand.Next(10000, 100000);
             this.id = rand_num;
@@ -34,6 +39,8 @@ namespace MODUL6_103022400008
 
         public void AddTrack(SayaMusicTrack item) 
         {
+            Debug.Assert(item != null, "Object lagu tidak boleh kosong");
+            Debug.Assert(item.getPlayCount() <= int.MaxValue);
             this.uploadedTracks.Add(item);
         }
 
@@ -43,6 +50,7 @@ namespace MODUL6_103022400008
             int idx = 1;
             foreach (SayaMusicTrack item in uploadedTracks)
             {
+                Contract.Ensures(idx <= 8);
                 Console.Write("Track " + (idx) + " judul:  ");
                 item.printTrackDetails();
                 Console.WriteLine();
